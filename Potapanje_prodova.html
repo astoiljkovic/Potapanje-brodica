@@ -1,0 +1,123 @@
+<html>
+	<head>
+	<title>Potapanje brodova</title>
+		<style type="text/css">
+			.polje
+			{
+				width: 100;
+				height: 100;
+				border: thin solid black;
+			}
+			.plavo
+			{
+				background-color: blue;
+			}
+			.crveno
+			{
+				background-color: red;
+			}
+		</style>
+		
+		<script type="text/javascript">
+		
+		var brod=[];
+		var pogodjeni=0;
+		var pokusaj=0;
+		
+		function KreirajTabelu()
+		{
+			var visina1=document.getElementById('visina').value;
+			var sirina1=document.getElementById('sirina').value;
+			
+			if(visina1<5 || sirina1<5)
+			{
+				visina1=5;
+				sirina1=5;
+				window.alert("Visina i sirina moraju biti jednake ili vece od 5! Kreirace se tabela velicine 5x5!");
+			}
+			
+			brojPolja=visina1*sirina1;
+			while(brod.length<Math.floor(brojPolja/3))
+			{
+				var slucajanBroj=1+Math.floor(Math.random()*brojPolja);
+				
+				if(brod.indexOf(slucajanBroj)==-1)
+				{
+					brod.push(slucajanBroj);
+				}
+			}
+			
+			tabela=document.getElementById('tabela');
+			tabela.innerHTML = "";
+			
+			brojac=1;
+			
+			for(i=0;i<visina1; i++)
+			{
+				trElement=document.createElement('tr');
+				tabela.appendChild(trElement);
+				
+				for(j=0;j<sirina1;j++)
+				{
+					
+                        tdElement = document.createElement('td');           
+                        trElement.appendChild(tdElement);                   
+                        divElement = document.createElement('div');         
+                        tdElement.appendChild(divElement);                  
+                        divElement.className='polje';                   
+                        divElement.onclick=Gadjanje.bind(this, brojac);   
+                        divElement.id='mojdiv' + brojac;                  
+                        divElement.value=brojac;                          
+                        brojac++;   
+				}
+			}
+		}
+		
+		function Gadjanje(x)
+		{
+			var DivZaPromijenu=document.getElementById('mojdiv' + x);
+			
+			if(pokusaj>=Math.round((brojPolja/2)+10))
+			{
+				window.alert("Izgubili ste, nemate vise pokusaja. Vise srece drugi put.");
+				return;
+			}
+			
+			if(brod.indexOf(DivZaPromijenu.value)!=-1)
+			{
+				DivZaPromijenu.className="crveno polje";
+				pogodjeni++;
+				pokusaj++;
+				
+				if(pogodjeni==Math.round(brojPolja/3))
+				{
+					window.alert("Cestitam, pobijedili ste!");
+					return;
+				}
+			}else
+				{
+					DivZaPromijenu.className="plavo polje";
+					pokusaj++;	
+				}
+				
+				DivZaPromijenu.onclick='';	
+		}
+		
+		
+		</script>
+		
+	</head>
+	
+	<body>
+		<p> Unesite dimenzije tabele(visina i sirina moraju biti vece ili jednake 5): </p>
+		<input id="visina">Visina </input> <br>
+		<input id="sirina">Sirina </input> <br>
+		<button onclick="KreirajTabelu();">Kreiraj tabelu</button>
+		
+		<table>
+			<tbody id="tabela">
+			</tbody>
+		</table>
+		
+	</body>
+</html>
